@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'RareFormAPI',
     'rest_framework',
-    'Renderer',
     'spotify'
 ]
 
@@ -100,7 +99,7 @@ if config('MODE')=="dev":
 else:
    DATABASES = {
        'default': dj_database_url.config(
-           default=config('MODE')
+           default=config('DATABASE_URL')
        )
    }
 
