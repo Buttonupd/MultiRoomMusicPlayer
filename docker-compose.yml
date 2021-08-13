@@ -1,12 +1,11 @@
-version: '3'
+version: '3.9'
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: "python manage.py runserver 0.0.0.0:8000"
+    image: '127.0.0.1:5000/multiroommusicplayer_backend' 
+    build: .
+    command:  "gunicorn Queens.wsgi:application --bind 0.0.0.0:8000 --workers=4"
     ports:
-      - 8000:8000      
+      - 8000:8000    
     volumes:
       - .:/app 
     depends_on:
@@ -17,11 +16,25 @@ services:
     image: postgres:13-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    expose:
-      - 5432
+    ports:
+      - 5432:5432
     environment:
-      - POSTGRES_USER=''
-      - POSTGRES_PASSWORD=''
-      - POSTGRES_DB=''
+      - POSTGRES_USER=""
+      - POSTGRES_PASSWORD=""
+      - POSTGRES_DB=s""
+      - DATABASE=""
+      - DATABASE_HOST=""
+      - DATABASE_PORT=""
+
+  nginx:
+    container_name: nginx
+    image: nginx:mainline-alpine
+    restart: always
+    ports:
+      - 1337:80
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - backend
 volumes:
   postgres_data:
